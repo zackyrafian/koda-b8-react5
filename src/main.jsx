@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import ResultSurvey from './pages/result-survey.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 
 const router = createBrowserRouter([ 
@@ -10,8 +11,8 @@ const router = createBrowserRouter([
     element: <App/>
   },
   { 
-    paht: '/result-survery', 
-    element: <></>
+    path: '/result-survery', 
+    element: <ResultSurvey/>
   }
 ])
 
