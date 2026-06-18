@@ -17,7 +17,13 @@ export default function App() {
 
     let iData = localStorage.getItem('dataSurvey');
     let arrData = iData ? JSON.parse(iData) : [];
-    arrData.push(data);
+    const surveyData = {
+      ...data,
+      cig: data.perokok === 'Ya'
+        ? (data.cig || [])
+        : []
+    };
+    arrData.push(surveyData);
     localStorage.setItem('dataSurvey', JSON.stringify(arrData));
 
     // console.log(arrData);
@@ -32,14 +38,14 @@ export default function App() {
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl font-normal text-black">Survery Perokok</h1>
             <div className="text-gray-800">Jumlah perokok aktif di Indonesia mencapai 70 juta orang, dengan estimasi persentase perokok pria tertinggi di dunia mencapai 73,2%. Berdasarkan laporan resmi, prevalensi perokok anak usia muda meningkat dan penggunaan rokok elektrik naik hingga sepuluh kali lipat dalam satu dekade terakhir.</div>
-            <Link className="mt-2 color-blue-500" to="/data">Data Suvery</Link>
+            <Link className="mt-2 color-blue-500" to="/result-survey">Data Suvery</Link>
           </div>
         </div>
   
       <form id="form-data" onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col items-center gap-5">
       <div className="bg-white rounded-xl border border-black/30 p-6 w-full flex flex-col gap-6 shadow-sm">
       <label className="font-medium text-lg" for="name">Siapa nama lengkap anda?</label>
-      <div className="border-b p-2">
+      <div className="border-b border-b-black/20 p-2">
         <input className="w-full focus-visible:outline-none" id="name" type="text" {...register('name')} placeholder="Your answer"/>
           </div>
           {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
@@ -47,7 +53,7 @@ export default function App() {
   
         <div className="bg-white rounded-xl border border-black/30 p-6 w-full flex flex-col gap-6 shadow-sm">
           <label className="font-medium text-lg" for="age">Berapa umur anda?</label>
-          <div className="border-b p-2">
+          <div className="border-b border-b-black/20 p-2">
             <input className="w-full focus-visible:outline-none" id="age" type="number" {...register('age')} placeholder="Your answer"/>
           </div>
           {errors.age && <span className="text-red-500 text-sm">{errors.age.message}</span>}
