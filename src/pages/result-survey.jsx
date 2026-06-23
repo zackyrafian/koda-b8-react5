@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { Link } from "react-router";
+import { removeData } from "../redux/reducers/data";
 
 export default function ResultSurvey() {
-  const [data] = useState(() => {
-    const stored = localStorage.getItem("dataSurvey");
-    return stored ? JSON.parse(stored) : [];
-  });
-
+  // const [data] = useState(() => {
+  //   const stored = localStorage.getItem("dataSurvey");
+  //   return stored ? JSON.parse(stored) : [];
+  // });
+  // 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const data = useSelector(state => state.data.surveyList); 
+  
   return (
     <div className="flex items-center m-auto gap-4 flex-col max-w-[867px] w-full px-4 pt-4">
       <div className="bg-white rounded-xl border border-black/30 p-6 w-full overflow-hidden shadow-sm">
+        <Link className="text-xs" onClick={() => navigate('/survey')}>Kembali ke survey</Link>
         <h1 className="text-2xl font-normal text-black mb-4">
           Data Survey
         </h1>
@@ -24,7 +32,8 @@ export default function ResultSurvey() {
                 <th className="p-2">Umur</th>
                 <th className="p-2">Jenis Kelamin</th>
                 <th className="p-2">Perokok</th>
-                <th className="p-2">Rokok yang Pernah Dicoba</th>
+                <th className="p-2 px-4">Rokok yang Pernah Dicoba</th>
+                <th>Aksi</th>
               </tr>
             </thead>
 
@@ -44,6 +53,12 @@ export default function ResultSurvey() {
                       ? item.cig.join(", ")
                       : "-"}
                   </td>
+                  <td 
+                  className="p-2 text-red-500 cursor-pointer hover:underline"
+                  onClick={() => dispatch(removeData(index))}
+                >
+                  Hapus
+                </td>
                 </tr>
               ))}
             </tbody>
@@ -53,3 +68,5 @@ export default function ResultSurvey() {
     </div>
   );
 }
+
+

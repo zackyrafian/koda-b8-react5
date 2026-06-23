@@ -2,6 +2,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { addData } from './redux/reducers/data';
+import { useNavigate } from 'react-router';
 const shema = yup.object({
   name: yup.string().required('Nama lengkap wajib disii'), 
   age: yup.number().positive().typeError('Harus Berupa angka').required('Umur wajib diisi')
@@ -12,24 +15,30 @@ export default function App() {
     resolver: yupResolver(shema)
   });
 
+  const navigate = useNavigate();
+  const data = useSelector((state) => state.data.surveyList);
+  console.log(data);
+  const dispatch = useDispatch(); 
+
+
   function onSubmit(data) {
-    // console.log(data);
-
-    let iData = localStorage.getItem('dataSurvey');
-    let arrData = iData ? JSON.parse(iData) : [];
-    const surveyData = {
-      ...data,
-      cig: data.perokok === 'Ya'
-        ? (data.cig || [])
-        : []
-    };
-    arrData.push(surveyData);
-    localStorage.setItem('dataSurvey', JSON.stringify(arrData));
-
-    // console.log(arrData);
-
-    alert('Data berhasil disimpan!');
-    reset();
+    dispatch(addData({
+      ...data, 
+      cig: data.perokok === 'Ya' ? (data.cig || []) : []
+    }))
+    navigate('/result-survery')
+    
+    // let iData = localStorage.getItem('dataSurvey');
+    // let arrData = iData ? JSON.parse(iData) : [];
+    // const surveyData = {
+    //   ...data,
+    //   cig: data.perokok === 'Ya'
+    //     ? (data.cig || [])
+    //     : []
+    // };
+    // arrData.push(surveyData);
+    // alert('Data berhasil disimpan!');
+    // reset();
   }
 
   return (
@@ -38,6 +47,7 @@ export default function App() {
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl font-normal text-black">Survery Perokok</h1>
             <div className="text-gray-800">Jumlah perokok aktif di Indonesia mencapai 70 juta orang, dengan estimasi persentase perokok pria tertinggi di dunia mencapai 73,2%. Berdasarkan laporan resmi, prevalensi perokok anak usia muda meningkat dan penggunaan rokok elektrik naik hingga sepuluh kali lipat dalam satu dekade terakhir.</div>
+          {/* <Link className="mt-2 color-blue-500" to="/result-survey">Data Suvery</Link>*/}
             <Link className="mt-2 color-blue-500" to="/result-survey">Data Suvery</Link>
           </div>
         </div>
